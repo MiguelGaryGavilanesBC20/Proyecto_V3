@@ -5,6 +5,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +18,7 @@ public class PanelDirigente extends JPanel implements ActionListener {
     private DefaultTableModel modeloTabla;
     private JTextField txtNombre, txtCargo, txtPatrimonio, txtFechaEleccion, txtEdad, txtCedula;
     private JLabel lbNombre, lbCargo, lbPatrimonio, lbFechaEleccion, lbEdad, lbCedula;
-    private JButton btnRegistrar;
+    private JButton btnRegistrar, btnGuardarNombres;
     private JTable tablaDirigentes;
     private JScrollPane scrollPane;
 
@@ -25,61 +28,63 @@ public class PanelDirigente extends JPanel implements ActionListener {
         setLayout(null);
 
         // Panel de registro
-        JPanel panelRegistro = new JPanel();
-        panelRegistro.setLayout(new GridLayout(6, 2, 10, 10));
-
         lbNombre = new JLabel("Nombre Completo");
-        lbNombre.setBounds(50, 20, 50, 20);
+        lbNombre.setBounds(50, 20, 100, 20);
         add(lbNombre);
 
         txtNombre = new JTextField();
-        txtNombre.setBounds(110, 20, 110, 20);
+        txtNombre.setBounds(150, 20, 110, 20);
         add(txtNombre);
 
         lbCargo = new JLabel("Cargo");
-        lbCargo.setBounds(50, 50, 50, 20);
+        lbCargo.setBounds(50, 50, 100, 20);
         add(lbCargo);
 
         txtCargo = new JTextField();
-        txtCargo.setBounds(110, 50, 110, 20);
+        txtCargo.setBounds(150, 50, 110, 20);
         add(txtCargo);
 
         lbEdad = new JLabel("Edad");
-        lbEdad.setBounds(50, 80, 50, 20);
+        lbEdad.setBounds(50, 80, 100, 20);
         add(lbEdad);
 
         txtEdad = new JTextField();
-        txtEdad.setBounds(110, 80, 110, 20);
+        txtEdad.setBounds(150, 80, 110, 20);
         add(txtEdad);
 
         lbCedula = new JLabel("Cédula");
-        lbCedula.setBounds(50, 110, 50, 20);
+        lbCedula.setBounds(50, 110, 100, 20);
         add(lbCedula);
 
         txtCedula = new JTextField();
-        txtCedula.setBounds(110, 110, 110, 20);
+        txtCedula.setBounds(150, 110, 110, 20);
         add(txtCedula);
 
         lbPatrimonio = new JLabel("Patrimonio ($)");
-        lbPatrimonio.setBounds(50, 140, 50, 20);
+        lbPatrimonio.setBounds(50, 140, 100, 20);
         add(lbPatrimonio);
 
         txtPatrimonio = new JTextField();
-        txtPatrimonio.setBounds(110, 140, 110, 20);
+        txtPatrimonio.setBounds(150, 140, 110, 20);
         add(txtPatrimonio);
 
         lbFechaEleccion = new JLabel("Fecha de Elección");
-        lbFechaEleccion.setBounds(50, 170, 50, 20);
+        lbFechaEleccion.setBounds(50, 170, 120, 20);
         add(lbFechaEleccion);
 
         txtFechaEleccion = new JTextField();
-        txtFechaEleccion.setBounds(110, 170, 110, 20);
+        txtFechaEleccion.setBounds(150, 170, 110, 20);
         add(txtFechaEleccion);
 
         btnRegistrar = new JButton("Registrar");
         btnRegistrar.setBounds(300, 20, 100, 30);
         add(btnRegistrar);
         btnRegistrar.addActionListener(this);
+
+        btnGuardarNombres = new JButton("Guardar Nombres");
+        btnGuardarNombres.setBounds(300, 60, 150, 30);
+        add(btnGuardarNombres);
+        btnGuardarNombres.addActionListener(this);
 
         // Configurar modelo de la tabla
         modeloTabla = new DefaultTableModel();
@@ -94,7 +99,7 @@ public class PanelDirigente extends JPanel implements ActionListener {
         this.modeloTabla = modeloTabla;
         tablaDirigentes = new JTable(modeloTabla);
         scrollPane = new JScrollPane(tablaDirigentes);
-        scrollPane.setBounds(50, 200, 420, 200);
+        scrollPane.setBounds(50, 220, 420, 200);
         add(scrollPane);
     }
 
@@ -108,7 +113,6 @@ public class PanelDirigente extends JPanel implements ActionListener {
             String patrimonioTexto = txtPatrimonio.getText();
             String fechaEleccion = txtFechaEleccion.getText();
 
-            // Validar campos
             if (nombre.isEmpty() || cargo.isEmpty() || edadTexto.isEmpty() || cedulaTexto.isEmpty() || patrimonioTexto.isEmpty() || fechaEleccion.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error al agregar los datos", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -119,16 +123,12 @@ public class PanelDirigente extends JPanel implements ActionListener {
                 double patrimonio = Double.parseDouble(patrimonioTexto);
                 int cedula = Integer.parseInt(cedulaTexto);
 
-               
                 String patrimonio_2 = String.format("$ %.2f", patrimonio);
-                // Agregar dirigente a la tabla
                 modeloTabla.addRow(new Object[]{nombre, cargo, edad, cedula, patrimonio_2, fechaEleccion});
 
-                 // Crear dirigente y agregarlo a la lista
-                 Dirigente nuevoDirigente = new Dirigente(nombre,fechaEleccion,patrimonio, cargo ,cedula, edad);
-                 listaDirigentes.add(nuevoDirigente);
+                Dirigente nuevoDirigente = new Dirigente(nombre);
+                listaDirigentes.add(nuevoDirigente);
 
-                // Limpiar campos
                 txtNombre.setText("");
                 txtCargo.setText("");
                 txtEdad.setText("");
@@ -140,29 +140,31 @@ public class PanelDirigente extends JPanel implements ActionListener {
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Edad y patrimonio deben ser números válidos.", "Error al agregar los datos", JOptionPane.ERROR_MESSAGE);
             }
+        }
 
-            notificarCambio();
+        if (e.getSource() == btnGuardarNombres) {
+            guardarNombresEnArchivo();
         }
     }
 
-    // Obtener lista de dirigentes
+    private void guardarNombresEnArchivo() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("nombres_dirigentes.txt"))) {
+            for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+                String nombre = (String) modeloTabla.getValueAt(i, 0);
+                writer.write(nombre);
+                writer.newLine();
+            }
+            JOptionPane.showMessageDialog(this, "Nombres guardados en el archivo 'nombres_dirigentes.txt'.");
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error al guardar los nombres: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     public List<Dirigente> getListaDirigentes() {
         return listaDirigentes;
     }
 
-    // Obtener el modelo de la tabla
     public DefaultTableModel getModeloTabla() {
         return modeloTabla;
-    }
-
-    public void addDirigenteListener(ActionListener listener) {
-        listeners.add(listener);
-    }
-
-    private void notificarCambio() {
-        ActionEvent evento = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "DirigenteAgregado");
-        for (ActionListener listener : listeners) {
-            listener.actionPerformed(evento);
-        }
     }
 }

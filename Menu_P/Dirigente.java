@@ -44,14 +44,6 @@ class Dirigente {
     private double patrimonio;
     private String cargo;
 
-    public Dirigente(String nombre, String fechaEleccion, double patrimonio, String cargo,int cedula,int edad) {
-        this.nombre = nombre;
-        this.fechaEleccion = fechaEleccion;
-        this.edad=edad;
-        this.patrimonio = patrimonio;
-        this.cargo = cargo;
-        this.cedula= cedula;
-    }
     public Dirigente(String nombre){
         this.nombre = nombre;
     }

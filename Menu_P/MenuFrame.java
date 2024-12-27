@@ -20,7 +20,7 @@ class MenuFrame extends JFrame implements ActionListener {
     private PanelArbitro formularioPanel3;
     private PanelDirigente formularioPanel4;
 
-    private List<Dirigente> listaDirigentes = new ArrayList<>();
+    private ArrayList<String> listaDirigentes = new ArrayList<>();
 
     public MenuFrame() {
         setTitle("Programa de Campeonato de Fútbol");
@@ -32,7 +32,7 @@ class MenuFrame extends JFrame implements ActionListener {
 
         // Inicializar paneles
         formularioPanel = new Panel_Jugador(modeloTabla);
-        formularioPanel2 = new Panel_Equipo(modeloTabla, listaDirigentes);
+        formularioPanel2 = new Panel_Equipo(modeloTabla);
         formularioPanel3 = new PanelArbitro(modeloTabla);
         formularioPanel4 = new PanelDirigente(modeloTabla);
 
@@ -134,7 +134,6 @@ class MenuFrame extends JFrame implements ActionListener {
         if (e.getSource() == nuevo_op1) {
             mostrarPanel(formularioPanel);
         } else if (e.getSource() == nuevo_op2) {
-            formularioPanel2.actualizarComboDirigente(listaDirigentes);
             mostrarPanel(formularioPanel2);
         } else if (e.getSource() == nuevo_op3) {
             mostrarPanel(formularioPanel3);
