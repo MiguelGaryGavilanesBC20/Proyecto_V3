@@ -1,0 +1,8 @@
+Barcelona,Primera,Pablo Perez Muñoz
+Emelec,Primera,Pablo Perez Muñoz
+Manchester,Primera,Miguel Vanegas Vargas
+Liverpool,Segunda,Pedro Vazquez
+Madrid,Segunda,Miguel Vanegas Vargas
+Queretaro,Primera,Pedro Farias Vite
+2dhhs,Segunda,Pablo Perez Muñoz
+Msjajaj,Primera,Pablo Perez Muñoz
